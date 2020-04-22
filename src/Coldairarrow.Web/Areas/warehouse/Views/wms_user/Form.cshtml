@@ -1,0 +1,145 @@
+@using Coldairarrow.Entity.warehouse;
+@using Coldairarrow.Util;
+
+@{
+    Layout = "~/Views/Shared/_Layout_List.cshtml";
+
+    var obj = (wms_user)Model;
+    var objStr = Html.Raw(obj.ToJson());
+}
+
+<form id="dataForm" enctype="multipart/form-data" class="easyui-form" method="post" data-options="novalidate:true">
+    <table class="table_base">
+        <colgroup>
+            <col style="width:80px;" />
+        </colgroup>
+        <tbody>
+            
+            <tr>
+                <th>登录名</th>
+                <td>
+                    <input name="user_code" value="@obj.user_code" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>密码</th>
+                <td>
+                    <input name="user_password" value="@obj.user_password" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>真实姓名</th>
+                <td>
+                    <input name="user_name" value="@obj.user_name" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>英文名</th>
+                <td>
+                    <input name="user_name_en" value="@obj.user_name_en" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>状态</th>
+                <td>
+                    <input name="user_status" value="@obj.user_status" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>电子邮箱</th>
+                <td>
+                    <input name="user_email" value="@obj.user_email" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>用户QQ号码</th>
+                <td>
+                    <input name="user_qq" value="@obj.user_qq" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>人员所属部门ID</th>
+                <td>
+                    <input name="ud_id" value="@obj.ud_id" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>职位ID</th>
+                <td>
+                    <input name="p_id" value="@obj.p_id" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>角色ID</th>
+                <td>
+                    <input name="up_id" value="@obj.up_id" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>联系电话</th>
+                <td>
+                    <input name="user_phone" value="@obj.user_phone" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>联系手机号</th>
+                <td>
+                    <input name="user_mobile_phone" value="@obj.user_mobile_phone" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>备注</th>
+                <td>
+                    <input name="user_note" value="@obj.user_note" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>创建时间</th>
+                <td>
+                    <input name="user_add_time" value="@obj.user_add_time" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>最后登录时间</th>
+                <td>
+                    <input name="user_last_login" value="@obj.user_last_login" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+            <tr>
+                <th>最后更新时间</th>
+                <td>
+                    <input name="user_update_time" value="@obj.user_update_time" class="easyui-textbox" data-options="width:'200px',required:true">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+@section foottoolbar{
+    <a id="saveForm" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+}
+
+<script>
+    var rootUrl = '@Url.Content("~/")';
+    var theEntity = @objStr;
+
+    $(function () {
+        $('#saveForm').click(function () {
+            if (!$('#dataForm').form('enableValidation').form('validate'))
+                return;
+
+            var formValues = $('#dataForm').getValues();
+            $.extend(theEntity, formValues);
+            $.postJSON(rootUrl + 'warehouse/wms_user/SaveData', theEntity, function (resJson) {
+                if (resJson.Success) {
+                    parent.$('#dataTable').datagrid('clearChecked').datagrid('reload');
+                    parent.dialogMsg('保存成功!');
+                    parent.dialogClose('form');
+                }
+                else {
+                    dialogError(resJson.Msg);
+                }
+            });
+        });
+    });
+</script>
